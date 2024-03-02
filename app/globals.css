@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+/* ========================================== TAILWIND STYLES */
+@layer utilities {
+  .wrapper {
+    @apply max-w-7xl lg:mx-auto px-5 py-3 md:px-10 xl:px-0 w-full;
+  }
+}

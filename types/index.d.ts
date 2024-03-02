@@ -11,6 +11,19 @@ declare type UrlQueryParams = {
 
 declare type SearchParams = {
    searchParams: {
-    query: string
+    query: string;
+    searchedQuery?: string;
    }
+}
+
+declare type CarDetailsProps = {
+  isOpen: boolean;
+  closeModal: () => void;
+  imageDetails: any;
+  loading: boolean;
+}
+
+
+declare type SearchProps = {
+  placeholder: string;
 }
