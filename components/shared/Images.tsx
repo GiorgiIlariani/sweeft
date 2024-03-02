@@ -82,8 +82,8 @@ const Images = ({ images, searchText }: any) => {
               })
             }>
             <Image
-              src={image?.urls?.regular}
-              alt={image?.alt_description}
+              src={image?.urls?.regular || ""}
+              alt={image?.alt_description || "image"}
               width={image?.width}
               height={image?.height}
               className="w-full h-full rounded-[7px]"

@@ -82,8 +82,8 @@ const HistoryPage = () => {
                             className="w-[400px] h-[270px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
                             key={index}>
                             <Image
-                              src={image?.urls?.regular}
-                              alt={image?.alt_description}
+                              src={image?.urls?.regular || ""}
+                              alt={image?.alt_description || "image"}
                               width={image?.width}
                               height={image?.height}
                               className="w-full h-full rounded-[7px]"
