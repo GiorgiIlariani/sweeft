@@ -4,28 +4,41 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import { fetchImageDetails, fetchImages } from "@/lib/fetchImages";
-import { useInView } from "react-intersection-observer";
 
 const Images = ({ images, searchText }: any) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [imageDetails, setImageDetails] = useState();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
-  const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) {
-      const fetchData = async () => {
-        const fetchedMoreImages = await fetchImages(
-          searchText ? searchText : "",
-          page
-        );
-        images.push(...fetchedMoreImages);
-        setPage((prev) => (prev += 1));
-      };
-      fetchData();
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 20) {
+        // Load more images when user scrolls to the bottom (with a threshold of 20px)
+        fetchData();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]); // Re-run effect when page changes
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const fetchedMoreImages = await fetchImages(searchText || "", page);
+      images.push(...fetchedMoreImages);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error fetching more images:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [inView, images]);
+  };
 
   const closeModal = () => {
     setIsOpenModal(false);
@@ -41,17 +54,18 @@ const Images = ({ images, searchText }: any) => {
     imageDescription: string;
   }) => {
     setIsOpenModal(true);
-    setLoading(true); // Set loading state to true while fetching details
+    setLoading(true);
     try {
       const details = await fetchImageDetails(imageId);
       setImageDetails({ ...details, imageUrl, imageDescription });
     } catch (error) {
       console.error("Error fetching image details:", error);
-      // Handle error as needed
     } finally {
-      setLoading(false); // Set loading state to false after fetching
+      setLoading(false);
     }
   };
+
+  console.log({ images });
 
   return (
     <>
@@ -78,7 +92,7 @@ const Images = ({ images, searchText }: any) => {
           </div>
         ))}
       </div>
-      <div className="text-3xl font-bold text-red-700" ref={ref}>
+      <div className="text-3xl font-bold text-red-700">
         {loading && "Loading..."}
       </div>
       <Modal
