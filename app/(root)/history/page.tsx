@@ -2,12 +2,10 @@
 
 import React, { useState } from "react";
 
-import Search from "@/components/shared/Search";
+import Image from "next/image";
 import { fetchImages } from "@/lib/fetchImages";
 import { IoMdArrowDropdown } from "react-icons/io";
-import Images from "@/components/shared/Images";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 
 const HistoryPage = () => {
   const [loading, setLoading] = useState(false);
@@ -47,11 +45,10 @@ const HistoryPage = () => {
   return (
     <>
       <section className="py-5 md:py-10">
-        <h3 className="wrapper font-semibold text-4xl text-center sm:text-left ">
+        <h3 className="wrapper font-semibold text-4xl text-center sm:text-left">
           History
         </h3>
-        <Search placeholder="Search for image history..." />
-        <h3 className="text-center font-bold text-3xl mb-8 text-gray-800">
+        <h3 className="text-center font-bold text-3xl mb-8 text-gray-800 mt-8 px-2">
           Here you can see your <span className="text-blue-600">searched</span>{" "}
           images history!
         </h3>
@@ -63,9 +60,8 @@ const HistoryPage = () => {
           ) : (
             <ul className="wrapper mt-8 flex flex-col gap-5">
               {urlHistory.map((url: string, index: number) => (
-                <>
+                <React.Fragment key={index}>
                   <li
-                    key={index}
                     className="flex items-center justify-between gap-2 border border-gray-200 rounded-md py-2 px-8 hover:shadow transition duration-300 cursor-pointer"
                     onClick={() => handleUrlClick(url)}>
                     <p className="text-blue-500 font-semibold text-2xl hover:underline">
@@ -75,25 +71,25 @@ const HistoryPage = () => {
                       <IoMdArrowDropdown />
                     </span>
                   </li>
-                  <div className="max-w-7xl mx-auto flex justify-start gap-6 flex-wrap px-4 py-[10px]">
-                    {searchedUrl === url
-                      ? searchedImages.map((image: any) => (
-                          <div
-                            className="w-[400px] h-[270px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
-                            key={index}>
-                            <Image
-                              src={image?.urls?.regular || ""}
-                              alt={image?.alt_description || "image"}
-                              width={image?.width}
-                              height={image?.height}
-                              className="w-full h-full rounded-[7px]"
-                              priority
-                            />
-                          </div>
-                        ))
-                      : null}
-                  </div>
-                </>
+                  {searchedUrl === url ? (
+                    <div className="max-w-7xl mx-auto flex justify-center gap-6 flex-wrap px-4 py-[10px]">
+                      {searchedImages.map((image: any, i: number) => (
+                        <div
+                          className="w-[400px] h-[270px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
+                          key={i}>
+                          <Image
+                            src={image?.urls?.regular || ""}
+                            alt={image?.alt_description || "image"}
+                            width={image?.width}
+                            height={image?.height}
+                            className="w-full h-full rounded-[7px]"
+                            priority
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </React.Fragment>
               ))}
             </ul>
           )}

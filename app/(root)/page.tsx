@@ -9,7 +9,7 @@ const HomePage = async ({ searchParams }: SearchParams) => {
 
   return (
     <>
-      <h3 className="text-center font-bold text-4xl mb-8 text-gray-800 mt-12">
+      <h3 className="text-center font-bold text-3xl md:text-4xl mb-8 text-gray-800 mt-12 px-2">
         Discover and explore your{" "}
         <span className="text-blue-600">favorite</span> images
       </h3>

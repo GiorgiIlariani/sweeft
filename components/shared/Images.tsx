@@ -10,29 +10,39 @@ const Images = ({ images, searchText }: any) => {
   const [imageDetails, setImageDetails] = useState();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
+  const [fetchTimer, setFetchTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const { scrollTop, clientHeight, scrollHeight } =
         document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 20) {
-        // Load more images when user scrolls to the bottom (with a threshold of 20px)
-        fetchData();
+        if (fetchTimer === null) {
+          setFetchTimer(
+            setTimeout(() => {
+              fetchData();
+              setFetchTimer(null);
+            }, 500)
+          );
+        }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      if (fetchTimer !== null) {
+        clearTimeout(fetchTimer);
+      }
     };
-  }, [page]); // Re-run effect when page changes
+  }, [page, fetchTimer]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const fetchedMoreImages = await fetchImages(searchText || "", page);
-      images.push(...fetchedMoreImages);
       setPage((prevPage) => prevPage + 1);
+      images.push(...fetchedMoreImages);
     } catch (error) {
       console.error("Error fetching more images:", error);
     } finally {
@@ -65,14 +75,14 @@ const Images = ({ images, searchText }: any) => {
     }
   };
 
-  console.log({ images });
+  console.log({ page, loading });
 
   return (
     <>
-      <div className="max-w-7xl mx-auto flex justify-start gap-6 flex-wrap px-4 py-[10px]">
+      <div className="max-w-7xl mx-auto flex justify-center items-center gap-6 flex-wrap px-4 py-[10px]">
         {images.map((image: any, index: number) => (
           <div
-            className="w-[400px] h-[270px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
+            className="sm:w-[400px] w-[300px] sm:h-[270px] h-[190px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
             key={index}
             onClick={() =>
               openModal({

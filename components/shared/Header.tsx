@@ -5,7 +5,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="w-full border-b">
+    <header className="w-full border-b px-2">
       <div className="wrapper flex items-center justify-between">
         <Link href="/" className="sidebar-logo">
           <Image
