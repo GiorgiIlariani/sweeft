@@ -9,7 +9,6 @@ declare type UrlQueryParams = {
   value: string | null
 }
 
-// home page search params
 declare type SearchParams = {
    searchParams: {
     query: string;
@@ -17,20 +16,36 @@ declare type SearchParams = {
    }
 }
 
-declare type CarDetailsProps = {
+declare type ModalProps = {
   isOpen: boolean;
   closeModal: () => void;
-  imageDetails: any;
+  imageDetails:  {
+    imageUrl: string;
+    imageDescription: string;
+    downloads: {
+      total: string;
+    };
+    views: {
+      total: string;
+    };
+    likes: {
+      total: string;
+    };
+  };
 }
 
+declare  type ImageType = {
+  alt_description: string;
+  id: string;
+  urls: {
+    regular: string; full: string;
+  }
+  width: number;
+  height: number;
+}
 
 declare type ImagesProps = {
-  images: {
-    alt_description: string;
-    id: string;
-    urls: {
-      regular: string; full: string;
-    }
-  }[];
+  images: ImageType[];
   searchText: string; 
 }
+

@@ -35,21 +35,18 @@ const Search = () => {
         });
       }
 
-      // Check if the query already exists in the URL history
       if (query && !urlHistory.includes(query)) {
         setUrlHistory((prevHistory) => [
           query,
           ...prevHistory.filter((item) => item !== ""),
         ]);
       } else if (query) {
-        // If query exists, move it to the front
         setUrlHistory((prevHistory) => [
           query,
           ...prevHistory.filter((item) => item !== query && item !== ""),
         ]);
       }
 
-      // Save urlHistory to sessionStorage
       typeof window !== "undefined" &&
         sessionStorage.setItem("urlHistory", JSON.stringify(urlHistory));
 

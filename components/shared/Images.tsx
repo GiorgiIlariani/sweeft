@@ -67,7 +67,7 @@ const Images = ({ images, searchText }: ImagesProps) => {
   return (
     <>
       <div className="max-w-7xl mx-auto flex justify-center items-center gap-6 flex-wrap px-4 py-[10px]">
-        {images.map((image: any, index: number) => (
+        {images.map((image: ImageType, index: number) => (
           <div
             className="sm:w-[400px] w-[300px] sm:h-[270px] h-[190px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300 shadow-md bg-black bg-opacity-5 p-4"
             key={index}
@@ -101,7 +101,7 @@ const Images = ({ images, searchText }: ImagesProps) => {
       <Modal
         isOpen={isOpenModal}
         closeModal={closeModal}
-        imageDetails={imageDetails}
+        imageDetails={imageDetails!}
       />
     </>
   );
