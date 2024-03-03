@@ -9,6 +9,7 @@ declare type UrlQueryParams = {
   value: string | null
 }
 
+// home page search params
 declare type SearchParams = {
    searchParams: {
     query: string;

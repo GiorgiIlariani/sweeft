@@ -10,9 +10,11 @@ const Modal = ({
 }: CarDetailsProps) => {
   // Toggle 'overflow-hidden' class on body based on isOpen prop
   if (isOpen) {
-    document.body.classList.add("overflow-hidden");
+    typeof window !== "undefined" &&
+      document.body.classList.add("overflow-hidden");
   } else {
-    document.body.classList.remove("overflow-hidden");
+    typeof window !== "undefined" &&
+      document.body.classList.remove("overflow-hidden");
   }
 
   return (

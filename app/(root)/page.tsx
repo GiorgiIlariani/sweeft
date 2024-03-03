@@ -1,4 +1,3 @@
-import Header from "@/components/shared/Header";
 import Images from "@/components/shared/Images";
 import { fetchImages } from "@/lib/fetchImages";
 import Search from "@/components/shared/Search";
@@ -6,6 +5,8 @@ import Search from "@/components/shared/Search";
 const HomePage = async ({ searchParams }: SearchParams) => {
   const searchText = (searchParams?.query as string) || "";
   const allImages = await fetchImages(searchText);
+
+  console.log(allImages);
 
   return (
     <>
