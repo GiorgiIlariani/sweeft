@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 import { fetchImages } from "@/lib/fetchImages";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useInView } from "react-intersection-observer";
 
 const HistoryPage = () => {
   const [loading, setLoading] = useState(false);
@@ -14,10 +15,33 @@ const HistoryPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchedUrl = searchParams.get("url");
+  const [page, setPage] = useState(2);
+  const { ref, inView } = useInView();
 
   const urlHistoryString =
     typeof window !== "undefined" && sessionStorage.getItem("urlHistory");
   const urlHistory = urlHistoryString ? JSON.parse(urlHistoryString) : [];
+
+  useEffect(() => {
+    if (inView) {
+      fetchData();
+    }
+  }, [inView]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const fetchedMoreImages = await fetchImages(searchedUrl || "", page);
+      if (fetchedMoreImages) {
+        setSearchedImages([...searchedImages, ...fetchedMoreImages]);
+      }
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error fetching more images:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUrlClick = async (url: string) => {
     setLoading(true);
@@ -72,21 +96,32 @@ const HistoryPage = () => {
                     </span>
                   </li>
                   {searchedUrl === url ? (
-                    <div className="max-w-7xl mx-auto flex justify-center gap-6 flex-wrap px-4 py-[10px]">
-                      {searchedImages.map((image: any, i: number) => (
-                        <div
-                          className="w-[400px] h-[270px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
-                          key={i}>
-                          <Image
-                            src={image?.urls?.regular || ""}
-                            alt={image?.alt_description || "image"}
-                            width={image?.width}
-                            height={image?.height}
-                            className="w-full h-full rounded-[7px]"
-                            priority
-                          />
-                        </div>
-                      ))}
+                    <div className="flex flex-col max-w-7xl max-h-[800px] overflow-y-auto">
+                      <div className="mx-auto flex justify-center gap-6 flex-wrap px-4 py-[10px]">
+                        {searchedImages.map((image: any, i: number) => (
+                          <div
+                            className="w-[400px] h-[270px] object-cover rounded-[7px] cursor-pointer hover:scale-105 transition duration-300"
+                            key={i}>
+                            <Image
+                              src={image?.urls?.regular || ""}
+                              alt={image?.alt_description || "image"}
+                              width={image?.width}
+                              height={image?.height}
+                              className="w-full h-full rounded-[7px]"
+                              priority
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="w-[56px] mx-auto" ref={ref}>
+                        <Image
+                          src="./spinner.svg"
+                          alt="spinner"
+                          width={56}
+                          height={56}
+                          className="object-contain"
+                        />
+                      </div>
                     </div>
                   ) : null}
                 </React.Fragment>
