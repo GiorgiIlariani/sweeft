@@ -4,32 +4,40 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import { fetchImageDetails, fetchImages } from "@/lib/fetchImages";
-import { useInView } from "react-intersection-observer";
 
 const Images = ({ images, searchText }: ImagesProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [imageDetails, setImageDetails] = useState();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
-  const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) {
-      const fetchData = async () => {
-        setLoading(true);
-        try {
-          const fetchedMoreImages = await fetchImages(searchText, page);
-          images.push(...fetchedMoreImages);
-          setPage((prevPage) => prevPage + 1);
-        } catch (error) {
-          console.error("Error fetching more images:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 20 && !loading) {
+        fetchData();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const fetchedMoreImages = await fetchImages(searchText, page);
+      if (fetchedMoreImages) images.push(...fetchedMoreImages);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error fetching more images:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [inView]);
+  };
 
   const closeModal = () => {
     setIsOpenModal(false);
@@ -81,7 +89,7 @@ const Images = ({ images, searchText }: ImagesProps) => {
           </div>
         ))}
       </div>
-      <div ref={ref} className="w-[56px] mx-auto">
+      <div className="w-[56px] mx-auto">
         <Image
           src="./spinner.svg"
           alt="spinner"
@@ -100,20 +108,3 @@ const Images = ({ images, searchText }: ImagesProps) => {
 };
 
 export default Images;
-
-// useEffect(() => {
-//   console.log("useefect runs");
-
-//   const handleScroll = () => {
-//     const { scrollTop, clientHeight, scrollHeight } =
-//       document.documentElement;
-//     if (scrollTop + clientHeight >= scrollHeight - 20 && !loading) {
-//       fetchData();
-//     }
-//   };
-
-//   window.addEventListener("scroll", handleScroll);
-//   return () => {
-//     window.removeEventListener("scroll", handleScroll);
-//   };
-// }, [page]);
