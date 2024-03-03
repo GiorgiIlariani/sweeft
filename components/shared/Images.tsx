@@ -11,33 +11,33 @@ const Images = ({ images, searchText }: any) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const { scrollTop, clientHeight, scrollHeight } =
-  //       document.documentElement;
-  //     if (scrollTop + clientHeight >= scrollHeight - 20) {
-  //       fetchData();
-  //     }
-  //   };
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 20 && !loading) {
+        fetchData();
+      }
+    };
 
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [page]);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]);
 
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const fetchedMoreImages = await fetchImages(searchText || "", page);
-  //     images.push(...fetchedMoreImages);
-  //     setPage((prevPage) => prevPage + 1);
-  //   } catch (error) {
-  //     console.error("Error fetching more images:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const fetchedMoreImages = await fetchImages(searchText || "", page);
+      images.push(...fetchedMoreImages);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error fetching more images:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const closeModal = () => {
     setIsOpenModal(false);
@@ -63,6 +63,8 @@ const Images = ({ images, searchText }: any) => {
       setLoading(false);
     }
   };
+
+  console.log({ page });
 
   return (
     <>

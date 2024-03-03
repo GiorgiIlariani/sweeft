@@ -33,7 +33,7 @@ const Modal = ({
                 <div className="mx-auto flex-1 flex flex-col gap-5">
                   <Image
                     src={imageDetails?.imageUrl}
-                    alt={imageDetails?.imageDescription}
+                    alt={imageDetails?.imageDescription || "image"}
                     width={400}
                     height={280}
                     className="object-cover rounded"
