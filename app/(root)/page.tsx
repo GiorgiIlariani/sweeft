@@ -4,6 +4,7 @@ import Search from "@/components/shared/Search";
 
 const HomePage = async ({ searchParams }: SearchParams) => {
   const searchText = (searchParams?.query as string) || "";
+
   const allImages = await fetchImages(searchText);
 
   return (

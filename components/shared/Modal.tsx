@@ -2,12 +2,7 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { IoClose } from "react-icons/io5";
 
-const Modal = ({
-  isOpen,
-  closeModal,
-  imageDetails,
-  loading,
-}: CarDetailsProps) => {
+const Modal = ({ isOpen, closeModal, imageDetails }: CarDetailsProps) => {
   // Toggle 'overflow-hidden' class on body based on isOpen prop
   if (isOpen) {
     typeof window !== "undefined" &&

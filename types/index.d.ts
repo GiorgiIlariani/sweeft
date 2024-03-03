@@ -21,7 +21,6 @@ declare type CarDetailsProps = {
   isOpen: boolean;
   closeModal: () => void;
   imageDetails: any;
-  loading: boolean;
 }
 
 
