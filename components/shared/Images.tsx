@@ -10,45 +10,34 @@ const Images = ({ images, searchText }: any) => {
   const [imageDetails, setImageDetails] = useState();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
-  const [fetchTimer, setFetchTimer] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const { scrollTop, clientHeight, scrollHeight } =
-        document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 20) {
-        if (fetchTimer === null) {
-          setFetchTimer(
-            setTimeout(() => {
-              fetchData();
-              setFetchTimer(null);
-            }, 500)
-          );
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const { scrollTop, clientHeight, scrollHeight } =
+  //       document.documentElement;
+  //     if (scrollTop + clientHeight >= scrollHeight - 20) {
+  //       fetchData();
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (fetchTimer !== null) {
-        clearTimeout(fetchTimer);
-      }
-    };
-  }, [page, fetchTimer]);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [page]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const fetchedMoreImages = await fetchImages(searchText || "", page);
-      setPage((prevPage) => prevPage + 1);
-      images.push(...fetchedMoreImages);
-    } catch (error) {
-      console.error("Error fetching more images:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const fetchedMoreImages = await fetchImages(searchText || "", page);
+  //     images.push(...fetchedMoreImages);
+  //     setPage((prevPage) => prevPage + 1);
+  //   } catch (error) {
+  //     console.error("Error fetching more images:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const closeModal = () => {
     setIsOpenModal(false);
@@ -74,8 +63,6 @@ const Images = ({ images, searchText }: any) => {
       setLoading(false);
     }
   };
-
-  console.log({ page, loading });
 
   return (
     <>

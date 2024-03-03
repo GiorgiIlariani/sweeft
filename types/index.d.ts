@@ -28,3 +28,8 @@ declare type CarDetailsProps = {
 declare type SearchProps = {
   placeholder: string;
 }
+
+declare type ImagesProps = {
+  images: any;
+  searchText: string; 
+}
