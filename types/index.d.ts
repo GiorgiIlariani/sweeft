@@ -24,11 +24,13 @@ declare type CarDetailsProps = {
 }
 
 
-declare type SearchProps = {
-  placeholder: string;
-}
-
 declare type ImagesProps = {
-  images: any;
+  images: {
+    alt_description: string;
+    id: string;
+    urls: {
+      regular: string; full: string;
+    }
+  }[];
   searchText: string; 
 }

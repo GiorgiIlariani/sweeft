@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { formUrlQuery, removeKeysFromQuery } from "@/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const Search = ({ placeholder }: SearchProps) => {
+const Search = () => {
   const [query, setQuery] = useState("");
   const [urlHistory, setUrlHistory] = useState<string[]>(() => {
     const storedHistory =
@@ -64,7 +64,7 @@ const Search = ({ placeholder }: SearchProps) => {
       <input
         type="text"
         name="ძებნა"
-        placeholder={placeholder}
+        placeholder="Search images..."
         value={query}
         onChange={handleChange}
         className="w-full px-6 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-blue-600 focus:border-2 bg-transparent text-lg"

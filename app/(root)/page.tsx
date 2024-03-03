@@ -14,7 +14,7 @@ const HomePage = async ({ searchParams }: SearchParams) => {
         <span className="text-blue-600">favorite</span> images
       </h3>
       <div className="wrapper mx-auto">
-        <Search placeholder="Search images..." />
+        <Search />
       </div>
       <Images images={allImages} searchText={searchText} />
     </>
